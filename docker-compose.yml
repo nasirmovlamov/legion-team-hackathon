@@ -1,0 +1,30 @@
+# Application will be initialized from here
+# This is the entry point of the application
+# bookstore-client is nextjs app
+# bookstore-server is nestjs app
+
+# 1. create database
+# 2. build server
+# 3. build client
+# 4. run server
+# 5. run client
+
+services:
+  postgres:
+    ports:
+      - "5432:5432"
+    build:
+      context: ./databases/some-postgres
+      dockerfile: Dockerfile
+  server:
+    build:
+      context: ./bookstore-client/
+      dockerfile: Dockerfile
+    ports:
+      - "8080:9000"
+  client:
+    build:
+      context: ./bookstore-server/
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
