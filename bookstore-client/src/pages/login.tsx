@@ -30,27 +30,7 @@ export default function Login(props: Props) {
       error: loginError,
     },
   ] = authApi.useLoginMutation();
-  const [
-    meApi,
-    {
-      isLoading: meLoading,
-      isError: isMeError,
-      isSuccess: meSuccess,
-      data: meData,
-      error: meError,
-    },
-  ] = authApi.useLazyMeQuery();
-  const [
-    playersUserInfoApi,
-    {
-      isLoading: playersUserInfoLoading,
-      isError: isPlayersUserInfoError,
-      isSuccess: playersUserInfoSuccess,
-      data: playersUserInfoData,
-      error: playersUserInfoError,
-    },
-  ] = teamApi.useLazyPlayersUserInfoQuery();
-
+ 
   const [backendErrors, setBackendErrors] = React.useState<any>(null);
   const methods = useForm<LoginDto>({
     resolver: yupResolver(loginSchema),

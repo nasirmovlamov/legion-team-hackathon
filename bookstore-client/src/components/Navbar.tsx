@@ -146,23 +146,25 @@ export const Navbar = () => {
           </div>
 
           <ul className="md:flex h-[40px] items-center hidden ">
-            <button onClick={() => handleToProfile()} className="flex gap-3">
-              <li className="pl-5 pr-3 flex gap-2 items-center text-gray-600 text-md">
-                <svg
-                  className=" inline-block h-6 w-6 stroke-black stroke-2 stroke-skin-dark"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M5 20v-1a7 7 0 017-7v0a7 7 0 017 7v1M12 12a4 4 0 100-8 4 4 0 000 8z"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                </svg>
-                <span> Account</span>
-              </li>
-            </button>
+            {userJwt && (
+              <button onClick={() => handleToProfile()} className="flex gap-3">
+                <li className="pl-5 pr-3 flex gap-2 items-center text-gray-600 text-md">
+                  <svg
+                    className=" inline-block h-6 w-6 stroke-black stroke-2 stroke-skin-dark"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M5 20v-1a7 7 0 017-7v0a7 7 0 017 7v1M12 12a4 4 0 100-8 4 4 0 000 8z"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                  </svg>
+                  <span> Account</span>
+                </li>
+              </button>
+            )}
             {userJwt && (
               <li className="pl-4 pr-3 bg-[#032974] text-white rounded-md px-4 py-[6px] hover:bg-[#0a3b9d] transition duration-300 ease-in-out">
                 <button onClick={logoutUser} className="m-0 p-0">
@@ -170,11 +172,30 @@ export const Navbar = () => {
                 </button>
               </li>
             )}
-            {/* {!userJwt && (
+            {!userJwt && (
               <li className="pl-4 pr-3">
-                <Link href="/login">Login</Link>
+                <Link
+                  href="/login"
+                  className={
+                    " max-w-[200px] w-full   px-8 py-2 bg-transparent border border-gray-500 text-gray-500"
+                  }
+                >
+                  Login
+                </Link>
               </li>
-            )} */}
+            )}
+            {!userJwt && (
+              <li className="pl-1 pr-3">
+                <Link
+                  href="/login"
+                  className={
+                    " max-w-[200px] w-full   px-8 py-[9px] bg-[#F05726] text-white"
+                  }
+                >
+                  Sign Up
+                </Link>
+              </li>
+            )}
           </ul>
 
           <div className="flex gap-3 md:hidden">

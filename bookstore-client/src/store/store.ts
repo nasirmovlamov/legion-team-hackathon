@@ -8,10 +8,8 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 import { authApi } from "./authApi";
 import toast from "react-hot-toast";
-import { teamApi } from "./teamApi";
 import { counter } from "@fortawesome/fontawesome-svg-core";
 import { authSlice } from "./authSlice";
-import { playerApi } from "./playerApi";
 
 export const rtkQueryErrorLogger: Middleware = () => (next) => (action) => {
   if (isRejectedWithValue(action) && !action.type.includes("Internal")) {
@@ -29,19 +27,13 @@ export const store = configureStore({
   reducer: {
     // Add the generated reducer as a specific top-level slice
     [authApi.reducerPath]: authApi.reducer,
-    [teamApi.reducerPath]: teamApi.reducer,
-    [playerApi.reducerPath]: playerApi.reducer,
-    player: playerApi.reducer,
     auth: authSlice.reducer,
-    team: teamApi.reducer,
   },
   // Adding the api middleware enables caching, invalidation, polling,
   // and other useful features of `rtk-query`.
   middleware: (getDefaultMiddleware): any => [
     ...getDefaultMiddleware(),
     authApi.middleware,
-    teamApi.middleware,
-    playerApi.middleware,
     rtkQueryErrorLogger,
   ],
 });

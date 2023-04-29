@@ -74,7 +74,7 @@ export type RegisterDto = {
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://api.goalplus.az/api",
+    baseUrl: "http://localhost:9000/auth",
     // global error message toaster
     // ref: https://redux-toolkit.js.org/rtk-query/usage/customizing-queries#global-error-handling
     prepareHeaders: (headers, { getState }) => {
@@ -155,7 +155,7 @@ export const authApi = createApi({
 
     login: builder.mutation<JwtDto, LoginDto>({
       query: (body) => ({
-        url: `/authentication/login`,
+        url: `/login`,
         method: "POST",
         body,
       }),
@@ -164,7 +164,7 @@ export const authApi = createApi({
 
     register: builder.mutation<RegisterDto, RegisterDto>({
       query: (body) => ({
-        url: ``,
+        url: `/register`,
         method: "POST",
         body,
       }),
