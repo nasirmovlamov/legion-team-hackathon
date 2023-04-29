@@ -66,66 +66,9 @@ export default function Login(props: Props) {
       await loginApi(data)
         .unwrap()
         .then(async (res) => {
-          toast.success("Login success");
           localStorage.setItem("accessToken", res.accessToken);
           localStorage.setItem("refreshToken", res.refreshToken);
           localStorage.setItem("token", res.accessToken);
-          const decodedJwt = JSON.parse(atob(res.accessToken.split(".")[1]));
-          localStorage.setItem("userData", JSON.stringify(decodedJwt));
-          const userId =
-            decodedJwt[
-              "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
-            ];
-          localStorage.setItem("userId", userId);
-          await meApi({});
-
-          if (
-            decodedJwt[
-              "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-            ].includes("Admin")
-          ) {
-            router.push("/admin-dashboard");
-            return;
-          }
-          if (
-            decodedJwt[
-              "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-            ].includes("Captain")
-          ) {
-            router.push("/team-register-process");
-            return;
-          }
-          try {
-            const resp: any = await playersUserInfoApi({
-              userId: userId,
-            });
-            if (
-              resp?.isCaptain &&
-              decodedJwt[
-                "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-              ].includes("Athlete")
-            ) {
-              router.push("/team-register-process");
-              return;
-            }
-            if (
-              resp.status !== "rejected" &&
-              decodedJwt[
-                "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-              ].includes("Athlete")
-            ) {
-              router.push("/user-register-process");
-              return;
-            }
-            // console.log(resp.status);
-            if (resp.status === "rejected") {
-              router.push("/team-register-process");
-              return;
-            }
-          } catch (error) {
-            router.push("/team-register-process");
-            return;
-          }
         });
     } catch (error: any) {
       toast.error(error?.data?.message);

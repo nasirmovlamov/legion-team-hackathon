@@ -44,14 +44,14 @@ export const Footer = () => {
         <div className=" flex flex-wrap justify-center md:justify-start gap-3 md:gap-0">
           <div className="flex gap-3 items-center">
             <FontAwesomeIcon icon={faPhone} />
-            <a href="tel:+994773063702">
+            <a href="tel:+994773063702" target="_blank">
               <span className="text-[#54ACED]">+994773063702</span>
             </a>
           </div>
           <div className="flex gap-3 items-center pl-10">
             <FontAwesomeIcon icon={faEnvelope} />
-            <a href="mailto:info@bookbazzar.az">
-              <span className="text-[#54ACED]">info@bookbazzar.az</span>
+            <a href="mailto:info@bookbazzar.az" target="_blank">
+              <span className="text-[#54ACED]">bookbazaar.az@gmail.com</span>
             </a>
           </div>
         </div>
