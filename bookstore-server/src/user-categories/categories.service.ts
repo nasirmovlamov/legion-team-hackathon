@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, In, Repository, UpdateResult } from 'typeorm';
 import { CategoryUser } from './entities/user-category.entity';
 import { CreateUserCategoryDto } from './dto/user-create-category.dto';
 import { UpdateUserCategoryDto } from './dto/user-update-category.dto';
@@ -19,6 +19,10 @@ export class CategoryUserService {
       createCategoryDto,
     );
     return await this.categoryUserRepository.save(newCategory);
+  }
+
+  async findWithIds(ids: CategoryUser[]): Promise<CategoryUser[]> {
+    return await this.categoryUserRepository.findBy({ id: In([...ids]) });
   }
 
   async findAll(): Promise<CategoryUser[]> {

@@ -3,7 +3,6 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Role } from 'src/roles/entities/role.entity';
 import { RolesService } from 'src/roles/roles.service';
 import { CreateUserDto } from './dto/create-user.dto';
 
@@ -57,7 +56,6 @@ export class UsersService {
 
   async remove(id: string): Promise<boolean> {
     const deletedUser = await this.usersRepository.delete(id);
-
     if (deletedUser.affected === 0) {
       throw new NotFoundException('User not found');
     }
@@ -72,7 +70,6 @@ export class UsersService {
       password: user.password,
       roles: userRoles,
     });
-
     //save user with relations (roles)
     await this.usersRepository.save(newUser);
     const userWithRoles = await this.usersRepository.findOne({

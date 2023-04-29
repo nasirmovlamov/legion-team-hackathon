@@ -1,28 +1,31 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCategoryDto } from './dto/create-book-category.dto';
-import { UpdateCategoryDto } from './dto/update-book-category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Category } from './entities/category.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { Tag } from 'src/tags/entities/tag.entity';
+import { CategoryBook } from './entities/category.entity';
+import { CreateBookCategoryDto } from './dto/create-book-category.dto';
+import { UpdateCategoryBookDto } from './dto/update-book-category.dto';
 
 @Injectable()
-export class CategoryService {
+export class CategoryBookService {
   constructor(
-    @InjectRepository(Category)
-    private categoryRepository: Repository<Category>,
+    @InjectRepository(CategoryBook)
+    private categoryRepository: Repository<CategoryBook>,
   ) {}
 
-  async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
-    const newCategory = await this.categoryRepository.create(createCategoryDto);
+  async create(
+    createCategoryBookDto: CreateBookCategoryDto,
+  ): Promise<CategoryBook> {
+    const newCategory = await this.categoryRepository.create(
+      createCategoryBookDto,
+    );
     return await this.categoryRepository.save(newCategory);
   }
 
-  async findAll(): Promise<Category[]> {
+  async findAll(): Promise<CategoryBook[]> {
     return this.categoryRepository.find();
   }
 
-  async findOne(id: number): Promise<Category> {
+  async findOne(id: number): Promise<CategoryBook> {
     return await this.categoryRepository.findOne({
       where: { id },
     });
@@ -30,7 +33,7 @@ export class CategoryService {
 
   async update(
     id: number,
-    updateCategoryDto: UpdateCategoryDto,
+    updateCategoryDto: UpdateCategoryBookDto,
   ): Promise<UpdateResult> {
     return await this.categoryRepository.update(id, updateCategoryDto);
   }

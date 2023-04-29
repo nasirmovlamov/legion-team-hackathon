@@ -19,6 +19,16 @@ import { Action } from './actions/entities/action.entity';
 import { BlogsModule } from './blogs/blogs.module';
 import { TagsModule } from './tags/tags.module';
 import { CategoriesModule } from './categories/categories.module';
+import { MerchantsModule } from './merchants/merchants.module';
+import { PublishersModule } from './publishers/publishers.module';
+import { SellerAuthorsModule } from './seller-authors/seller-authors.module';
+import { BooksModule } from './books/books.module';
+import { SwapsModule } from './swaps/swaps.module';
+import { CategoryUser } from './user-categories/entities/user-category.entity';
+import { CategoryBook } from './book-categories/entities/category.entity';
+import { CategoriesBookModule } from './book-categories/categories.module';
+import { CategoriesUserModule } from './user-categories/categories.module';
+import { MediaModule } from './media/media.module';
 
 @Module({
   imports: [
@@ -29,22 +39,23 @@ import { CategoriesModule } from './categories/categories.module';
       username: 'postgres',
       password: 'mysecretpassword',
       database: 'postgres',
-      entities: [Tag, Category, Blog, Action, Permission, Role, User],
+      entities: [
+        Tag,
+        Category,
+        Blog,
+        Action,
+        Permission,
+        Role,
+        User,
+        CategoryUser,
+        CategoryBook,
+      ],
       synchronize: true,
       dropSchema: true,
-
-      // url: 'postgres://dtugdfdr:3wFsVVYW_bHokKTTzHKtN53KqdM2wGeX@hattie.db.elephantsql.com/dtugdfdr
-      // type: 'postgres',
-      // host: 'hattie.db.elephantsql.com',
-      // port: 5432,
-      // database: 'dtugdfdr',
-      // username: 'dtugdfdr',
-      // password: '3wFsVVYW_bHokKTTzHKtN53KqdM2wGeX',
-      // entities: [Tag, Category, Blog, Action, Permission, Role, User],
-      // synchronize: true,
-      // dropSchema: true,
     }),
     UsersModule,
+    CategoriesBookModule,
+    CategoriesUserModule,
     AuthModule,
     ConfigModule.forRoot(),
     RolesModule,
@@ -53,6 +64,12 @@ import { CategoriesModule } from './categories/categories.module';
     BlogsModule,
     TagsModule,
     CategoriesModule,
+    MerchantsModule,
+    PublishersModule,
+    SellerAuthorsModule,
+    BooksModule,
+    SwapsModule,
+    MediaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
