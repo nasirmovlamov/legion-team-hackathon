@@ -15,7 +15,7 @@ const Profile = (props: Props) => {
     isLoading: booksLoading,
     isError: isBooksError,
     error: booksError,
-  } = booksApi.useGetBooksQuery();
+  } = booksApi.useGetBooksQuery({});
 
   const [
     confirmApi,

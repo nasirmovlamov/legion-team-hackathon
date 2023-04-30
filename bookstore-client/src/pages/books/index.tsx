@@ -16,14 +16,22 @@ import React, { useEffect } from "react";
 type Props = {};
 
 const Books = (props: Props) => {
-  const {
-    data: booksData,
-    isLoading: booksLoading,
-    isError: isBooksError,
-    error: booksError,
-  } = booksApi.useGetBooksQuery();
+  const [
+    getBooksApi,
+    {
+      data: booksData,
+      isLoading: booksLoading,
+      isError: isBooksError,
+      error: booksError,
+    },
+  ] = booksApi.useLazyGetBooksQuery();
 
+  const [search, setSearch] = React.useState("");
   const [selection, setSelection] = React.useState(1);
+
+  useEffect(() => {
+    getBooksApi({});
+  }, []);
 
   useEffect(() => {
     // change body background color
@@ -33,6 +41,18 @@ const Books = (props: Props) => {
     };
   }, []);
 
+  const handleSearch = () => {
+    if (search.length > 0) {
+      // search for books
+      return;
+    }
+    getBooksApi({
+      isbn: search,
+    });
+  };
+  if (booksLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <div>
       <Container>
@@ -122,6 +142,8 @@ const Books = (props: Props) => {
               size="xl"
             />
             <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               type="text"
               placeholder="Search for the ISBN number..."
               className="w-full px-1 py-2 outline-none"
@@ -151,7 +173,9 @@ const Books = (props: Props) => {
 
         {selection === 3 && (
           <div className="flex flex-col gap-1 max-w-[700px] mx-auto pt-10">
-            <h4 className="text-[33px] text-center text-gray-400">Coming Soon</h4>
+            <h4 className="text-[33px] text-center text-gray-400">
+              Coming Soon
+            </h4>
           </div>
         )}
 

@@ -15,7 +15,7 @@ const BookCard = ({ book }: Props) => {
       <div className="flex flex-wrap gap-2 w-[250px]  shadow-md bg-white p-4 rounded-md">
         <h5 className="flex w-full flex-col gap-2 text-xs">{book.title}</h5>
         {!book.isDonation && (
-          <div className="flex  gap-2 text-xs self-end">
+          <div className="flex  gap-2 text-xs self-end w-[140px] py-1">
             Price: <span className="text-red-500">{book.price}</span> AZN
           </div>
         )}

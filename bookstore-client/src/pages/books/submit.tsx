@@ -49,10 +49,9 @@ export default function Submit(props: Props) {
 
   const onSubmit = async (data: CreateBookDto) => {
     try {
-      console.log(data);
       const res = await createBookApi({
         ...data,
-        isDonation: Boolean(data.isDonation),
+        isDonation: data.isDonation,
       }).unwrap();
       toast.success("Book has been submitted successfully");
     } catch (error: any) {
@@ -172,8 +171,8 @@ export default function Submit(props: Props) {
               className="border border-gray-300 rounded-md px-[6px] py-[12px]"
               placeholder="Enter book condition"
             >
-              <option value="true">Yes</option>
-              <option value="false">No</option>
+              <option value={true}>Yes</option>
+              <option value={false}>No</option>
             </select>
             <span className="text-red-500">{errors.price?.message}</span>
           </div>

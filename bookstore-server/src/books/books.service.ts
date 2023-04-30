@@ -25,6 +25,14 @@ export class BooksService {
     return await this.booksRepository.save(newBook);
   }
 
+  async findOneByIsbn(isbn: string) {
+    const book = await this.booksRepository.findOne({
+      where: { isbn },
+      relations: ['users'],
+    });
+    return book;
+  }
+
   async confirmBook(id: number, bookId: number) {
     const user = await this.usersService.findOne(id);
     console.log(user);
@@ -48,8 +56,23 @@ export class BooksService {
     return allBooks;
   }
 
-  async findAll() {
+  async findAll(isbn?: string) {
+    // if isbn is provided, return all books with that isbn
+    console.log('isbn', isbn);
+    if (isbn) {
+      console.log('isbn', isbn);
+      return await this.findAllByIsbn(isbn);
+    }
+    // else return all books
     const allBooks = await this.booksRepository.find({
+      relations: ['users'],
+    });
+    return allBooks;
+  }
+
+  async findAllByIsbn(isbn: string) {
+    const allBooks = await this.booksRepository.find({
+      where: { isbn },
       relations: ['users'],
     });
     return allBooks;
@@ -58,6 +81,7 @@ export class BooksService {
   async findOne(id: number) {
     return await this.booksRepository.findOne({
       where: { id },
+      relations: ['users'],
     });
   }
 

@@ -9,6 +9,7 @@ import {
   HttpException,
   UseGuards,
   Put,
+  Query,
 } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book.dto';
@@ -40,15 +41,15 @@ export class BooksController {
     }
   }
 
+  // get query params as isbn
   @Get()
-  findAll() {
-    return this.booksService.findAll();
+  findAll(@Query('isbn') isbn: string) {
+    return this.booksService.findAll(isbn);
   }
 
   @Put(':bookId/users/:id/confirm')
   async confirmBook(@Param('id') id: string, @Param('bookId') bookId: string) {
     try {
-      console.log(id, bookId);
       const confirmBook = await this.booksService.confirmBook(+id, +bookId);
       return confirmBook;
     } catch (error) {

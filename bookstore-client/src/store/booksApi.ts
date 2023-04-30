@@ -35,8 +35,8 @@ export const booksApi = createApi({
   }),
   tagTypes: ["books"],
   endpoints: (builder) => ({
-    getBooks: builder.query<any, void>({
-      query: () => `/`,
+    getBooks: builder.query<any, any>({
+      query: (body) => `?${body.isbn ? "isbn=" + body.isbn : ""}`,
       providesTags: ["books"],
     }),
 
