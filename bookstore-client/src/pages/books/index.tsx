@@ -42,8 +42,8 @@ const Books = (props: Props) => {
   }, []);
 
   const handleSearch = () => {
-    if (search.length > 0) {
-      // search for books
+    if (search.length < 1) {
+      console.log(search);
       return;
     }
     getBooksApi({
@@ -149,7 +149,12 @@ const Books = (props: Props) => {
               className="w-full px-1 py-2 outline-none"
             />
           </div>
-          <button className="bg-[#F05726] text-white px-8 py-3 w-max text-[20px]">
+
+          <button
+            onClick={handleSearch}
+            type="button"
+            className="bg-[#F05726] text-white px-8 py-3 w-max text-[20px]"
+          >
             SCOUT
           </button>
         </div>

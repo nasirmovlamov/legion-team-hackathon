@@ -49,9 +49,17 @@ export default function Submit(props: Props) {
 
   const onSubmit = async (data: CreateBookDto) => {
     try {
+      const convertStringTrueToBoolean = (value: string) => {
+        if (value === "true") {
+          return true;
+        } else {
+          return false;
+        }
+      };
+      const donation = convertStringTrueToBoolean(data.isDonation as any);
       const res = await createBookApi({
         ...data,
-        isDonation: data.isDonation,
+        isDonation: donation,
       }).unwrap();
       toast.success("Book has been submitted successfully");
     } catch (error: any) {

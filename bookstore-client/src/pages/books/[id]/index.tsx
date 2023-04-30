@@ -59,6 +59,7 @@ const SingleBook = (props: Props) => {
           <p className="text-[20px] text-gray-500"> {bookData?.condition}</p>
           <p className="text-[20px] text-gray-500">ISBN: {bookData?.isbn}</p>
           <p className="text-[30px] text-[#F05726]">{bookData?.price} AZN</p>
+          <p className="text-[30px] text-[#F05726]">reviews coming soon</p>
         </div>
       </div>
     </Container>
