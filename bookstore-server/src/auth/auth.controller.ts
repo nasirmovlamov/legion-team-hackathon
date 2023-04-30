@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Delete,
+  HttpException,
+  HttpStatus,
   Ip,
   Post,
   Req,
@@ -12,6 +14,7 @@ import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh.dto';
 import { RegisterDto } from './dto/register.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { request } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -19,19 +22,20 @@ export class AuthController {
 
   @Post('login')
   async login(@Req() request, @Ip() ip: string, @Body() body: LoginDto) {
-    return this.authService.login(body.email, body.password, {
+    const user = await this.authService.login(body.email, body.password, {
       ipaddress: ip,
       userAgent: request.headers['user-agent'],
     });
+    // return only error in nestjs
+    if (user instanceof HttpException) {
+      throw user;
+    }
+
+    return user;
   }
 
   @Post('register')
   async register(@Req() request, @Ip() ip: string, @Body() body: RegisterDto) {
-    // if (!(await this.authService.checkUserExists(body.email))) {
-    // send error message
-    // return 'User already exists';
-    // }
-
     return this.authService.register(body.name, body.email, body.password, {
       ipaddress: ip,
       userAgent: request.headers['user-agent'],

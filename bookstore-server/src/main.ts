@@ -11,6 +11,12 @@ import { RolesDefaultData } from './static/roles.static';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  // accept from all origins
+  app.enableCors({
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
 
   // create actions on startup
   // all actions are created on startup

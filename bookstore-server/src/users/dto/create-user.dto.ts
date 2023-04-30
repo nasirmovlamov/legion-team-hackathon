@@ -6,5 +6,4 @@ export class CreateUserDto {
   email: string;
   password: string;
   roles: Role[];
-  userCategories: CategoryUser[];
 }

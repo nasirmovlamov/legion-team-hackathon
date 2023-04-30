@@ -6,7 +6,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { authApi } from "@/store/authApi";
 import router from "next/router";
-import { teamApi } from "@/store/teamApi";
+import ErrorMapper from "@/components/ErrorMapper";
 type Props = {};
 
 export type LoginDto = {
@@ -30,8 +30,7 @@ export default function Login(props: Props) {
       error: loginError,
     },
   ] = authApi.useLoginMutation();
- 
-  const [backendErrors, setBackendErrors] = React.useState<any>(null);
+
   const methods = useForm<LoginDto>({
     resolver: yupResolver(loginSchema),
   });
@@ -43,24 +42,13 @@ export default function Login(props: Props) {
 
   const onSubmit = async (data: LoginDto) => {
     try {
-      await loginApi(data)
-        .unwrap()
-        .then(async (res) => {
-          localStorage.setItem("accessToken", res.accessToken);
-          localStorage.setItem("refreshToken", res.refreshToken);
-          localStorage.setItem("token", res.accessToken);
-        });
+      const res = await loginApi(data).unwrap();
+      toast.success("You are logged in");
+      router.push("/");
     } catch (error: any) {
       toast.error(error?.data?.message);
     }
   };
-
-  const loginErrorData = useMemo(() => {
-    if (isLoginError) {
-      return loginError as any;
-    }
-    return null;
-  }, [isLoginError, loginError]);
 
   return (
     <div className="flex justify-center pt-[50px] pb-[50px]">
@@ -68,8 +56,11 @@ export default function Login(props: Props) {
         <form
           action=""
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-4 max-w-[400px] w-full"
+          className="flex flex-col gap-4 max-w-[500px] w-full bg-white p-10 rounded-md shadow-md"
         >
+          <h1 className="text-center text-[#032974] text-2xl font-bold">
+            Sign in to <span className="text-[#F05726]">your account</span>
+          </h1>
           <div className="flex flex-col gap-2">
             <label htmlFor="email">
               <b> Email</b>
@@ -96,7 +87,7 @@ export default function Login(props: Props) {
           </div>
           <button
             type="submit"
-            className="bg-[#032974] text-white px-[6px] py-[12px] rounded-md"
+            className="bg-[#F05726] text-white px-[6px] py-[12px] rounded-md"
           >
             Login {loginLoading && <span className="animate-spin">...</span>}
           </button>
@@ -111,23 +102,7 @@ export default function Login(props: Props) {
             </Link>
           </div>
 
-          <div>
-            {loginError &&
-              ("status" in loginError ? (
-                <div>
-                  <div>
-                    {loginErrorData?.data &&
-                      Object.keys(loginErrorData.data).map((key) => {
-                        key !== "statusCode" && (
-                          <p key={key} className="text-red-500">
-                            {loginErrorData.data[key]}
-                          </p>
-                        );
-                      })}
-                  </div>
-                </div>
-              ) : null)}
-          </div>
+          <ErrorMapper error={loginError} />
         </form>
       </div>
     </div>

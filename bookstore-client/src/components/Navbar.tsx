@@ -7,15 +7,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
   faCheck,
+  faRightFromBracket,
   faUser,
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { authSlice } from "@/store/authSlice";
 import { authApi } from "@/store/authApi";
-import { teamApi } from "@/store/teamApi";
+
 import {
   useScrollPosition,
   useScrollXPosition,
@@ -42,16 +43,6 @@ export const Navbar = () => {
       error: meError,
     },
   ] = authApi.useLazyMeQuery();
-  const [
-    playersUserInfoApi,
-    {
-      isLoading: playersUserInfoLoading,
-      isError: isPlayersUserInfoError,
-      isSuccess: playersUserInfoSuccess,
-      data: playersUserInfoData,
-      error: playersUserInfoError,
-    },
-  ] = teamApi.useLazyPlayersUserInfoQuery();
 
   const logoutUser = () => {
     dispatch(authSlice.actions.logoutUser());
@@ -166,9 +157,13 @@ export const Navbar = () => {
               </button>
             )}
             {userJwt && (
-              <li className="pl-4 pr-3 bg-[#032974] text-white rounded-md px-4 py-[6px] hover:bg-[#0a3b9d] transition duration-300 ease-in-out">
-                <button onClick={logoutUser} className="m-0 p-0">
+              <li className="pl-4 pr-3 text-gray-500 rounded-md px-4 py-[6px] hover:text-[#F05726] hover:bg-gray-100">
+                <button
+                  onClick={logoutUser}
+                  className="m-0 p-0 flex gap-2 items-center"
+                >
                   Logout
+                  <FontAwesomeIcon icon={faRightFromBracket} />
                 </button>
               </li>
             )}
@@ -187,7 +182,7 @@ export const Navbar = () => {
             {!userJwt && (
               <li className="pl-1 pr-3">
                 <Link
-                  href="/login"
+                  href="/register"
                   className={
                     " max-w-[200px] w-full   px-8 py-[9px] bg-[#F05726] text-white"
                   }

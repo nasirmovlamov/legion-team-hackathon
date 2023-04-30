@@ -7,24 +7,29 @@ import { authSlice } from "@/store/authSlice";
 import { useAppDispatch } from "@/store/store";
 import { useRouter } from "next/router";
 import TopNav from "./TopNav";
+import { authApi } from "@/store/authApi";
 
 export default function Layout({ children }: ScriptProps) {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const [
+    meApi,
+    {
+      isLoading: meLoading,
+      isError: isMeError,
+      isSuccess: meSuccess,
+      data: meData,
+    },
+  ] = authApi.useLazyMeQuery();
 
   useEffect(() => {
     if (
       localStorage.getItem("accessToken") &&
       localStorage.getItem("refreshToken")
     ) {
-      dispatch(authSlice.actions.getTokenFromStorage());
-      dispatch(authSlice.actions.getUserFromStorage());
+      meApi();
     }
   }, []);
-
-  // useEffect(() => {
-  //   window.location.href = "http://azerqus0.beget.tech/";
-  // }, []);
 
   return (
     <div className="min-h-screen">

@@ -26,8 +26,8 @@ export type UserDto = {
 export type JwtDto = {
   accessToken: string;
   refreshToken: string;
+  user: any;
 };
-
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = React.useState<UserDto | null>(null);

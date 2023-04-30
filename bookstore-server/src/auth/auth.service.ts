@@ -1,9 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import RefreshToken from './entity/refresh-token.entity';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/entities/user.entity';
 import { sign, verify } from 'jsonwebtoken';
-import { async } from 'rxjs';
 
 @Injectable()
 export class AuthService {
@@ -60,14 +59,14 @@ export class AuthService {
         refreshToken: string;
         user: Omit<User, 'password'>;
       }
-    | undefined
+    | any
   > {
     const user = await this.usersService.findByEmailAndGetPassword(email);
     if (!user) {
-      return undefined;
+      return new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
     if (user.password !== password) {
-      return undefined;
+      return new HttpException('Wrong password', HttpStatus.BAD_REQUEST);
     }
     const token = await this.createNewRefreshAndAccessToken(user, values);
     return {
@@ -76,8 +75,8 @@ export class AuthService {
         id: user.id,
         name: user.name,
         email: user.email,
-        roles: user.roles,
-        permissions: user.permissions,
+        roles: user?.roles,
+        permissions: user?.permissions,
       },
     };
   }

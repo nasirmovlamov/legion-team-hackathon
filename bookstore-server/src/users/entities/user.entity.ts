@@ -27,9 +27,5 @@ export class User {
   @JoinTable()
   roles: Role[];
 
-  @ManyToMany(() => CategoryUser)
-  @JoinTable()
-  userCategories: CategoryUser[];
-
   permissions: Permission[];
 }

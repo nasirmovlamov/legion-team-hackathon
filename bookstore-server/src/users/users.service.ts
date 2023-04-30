@@ -27,9 +27,14 @@ export class UsersService {
       select: ['id', 'name', 'email', 'password'],
       relations: ['roles', 'roles.permissions'],
     });
+    if (!user) {
+      return undefined;
+    }
     return {
       ...user,
-      permissions: user.roles.map((item) => item.permissions).flat(),
+      permissions: user?.roles
+        ? user?.roles?.map((item) => item?.permissions).flat()
+        : [],
     };
   }
 

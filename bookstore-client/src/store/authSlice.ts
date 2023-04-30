@@ -5,7 +5,7 @@ import { JwtDto } from "@/context/AuthContext";
 
 export interface AuthState {
   jwt: JwtDto | null;
-  user: any;
+  user?: any;
 }
 
 const initialState: AuthState = {
@@ -26,24 +26,6 @@ export const authSlice = createSlice({
       state.jwt = null;
     },
 
-    getTokenFromStorage: (state) => {
-      const accessToken = localStorage.getItem("accessToken");
-      const refreshToken = localStorage.getItem("refreshToken");
-      if (accessToken && refreshToken) {
-        state.jwt = {
-          accessToken: accessToken,
-          refreshToken: refreshToken,
-        };
-      }
-    },
-
-    getUserFromStorage: (state) => {
-      const userData = localStorage.getItem("userData");
-      if (userData) {
-        state.user = JSON.parse(userData);
-      }
-    },
-
     logoutUser: (state) => {
       state.user = null;
       state.jwt = null;
@@ -51,21 +33,9 @@ export const authSlice = createSlice({
       localStorage.removeItem("userData");
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
-    }
+    },
   },
   extraReducers: (builder) => {
-    builder.addMatcher(
-      authApi.endpoints.authentication.matchFulfilled,
-      (state, action) => {
-        console.log(action.payload);
-        state.jwt = {
-          accessToken: action.payload.accessToken,
-          refreshToken: action.payload.refreshToken,
-        };
-        state.user = action.payload.user;
-      }
-    );
-
     builder.addMatcher(
       authApi.endpoints.login.matchFulfilled,
       (state, action) => {
@@ -73,13 +43,41 @@ export const authSlice = createSlice({
           state.jwt = {
             accessToken: action.payload.accessToken,
             refreshToken: action.payload.refreshToken,
+            user: action.payload.user,
           };
-          state.user = action.payload.refreshToken;
+          localStorage.setItem("accessToken", action.payload.accessToken);
+          localStorage.setItem("refreshToken", action.payload.refreshToken);
+        }
+      }
+    );
+
+    builder.addMatcher(authApi.endpoints.me.matchFulfilled, (state, action) => {
+      if (action.payload) {
+        state.jwt = {
+          accessToken: action.payload.accessToken,
+          refreshToken: action.payload.refreshToken,
+          user: action.payload.user,
+        };
+        // localStorage.setItem("accessToken", action.payload.accessToken);
+        // localStorage.setItem("refreshToken", action.payload.refreshToken);
+      }
+    });
+
+    builder.addMatcher(
+      authApi.endpoints.register.matchFulfilled,
+      (state, action) => {
+        if (action.payload) {
+          state.jwt = {
+            accessToken: action.payload.accessToken,
+            refreshToken: action.payload.refreshToken,
+            user: action.payload.user,
+          };
+          localStorage.setItem("accessToken", action.payload.accessToken);
+          localStorage.setItem("refreshToken", action.payload.refreshToken);
         }
       }
     );
   },
 });
 
-export const { setUserNull, setJwtNull, getTokenFromStorage } =
-  authSlice.actions;
+export const { setUserNull, setJwtNull } = authSlice.actions;

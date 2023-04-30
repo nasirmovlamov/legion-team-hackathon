@@ -9,6 +9,12 @@ const createFunction = async (expressInstance): Promise<void> => {
     AppModule,
     new ExpressAdapter(expressInstance),
   );
+  // accept from all origins
+  app.enableCors({
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
   await app.init();
 };
 export const api = functions.https.onRequest(async (request, response) => {
