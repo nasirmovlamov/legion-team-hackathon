@@ -47,6 +47,7 @@ export const authSlice = createSlice({
           };
           localStorage.setItem("accessToken", action.payload.accessToken);
           localStorage.setItem("refreshToken", action.payload.refreshToken);
+          localStorage.setItem("user", JSON.stringify(action.payload.user));
         }
       }
     );
@@ -58,8 +59,7 @@ export const authSlice = createSlice({
           refreshToken: action.payload.refreshToken,
           user: action.payload.user,
         };
-        // localStorage.setItem("accessToken", action.payload.accessToken);
-        // localStorage.setItem("refreshToken", action.payload.refreshToken);
+        localStorage.setItem("user", JSON.stringify(action.payload));
       }
     });
 
@@ -74,6 +74,7 @@ export const authSlice = createSlice({
           };
           localStorage.setItem("accessToken", action.payload.accessToken);
           localStorage.setItem("refreshToken", action.payload.refreshToken);
+          localStorage.setItem("user", JSON.stringify(action.payload.user));
         }
       }
     );

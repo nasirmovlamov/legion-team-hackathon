@@ -10,6 +10,8 @@ import { authApi } from "./authApi";
 import toast from "react-hot-toast";
 import { counter } from "@fortawesome/fontawesome-svg-core";
 import { authSlice } from "./authSlice";
+import { booksApi } from "./booksApi";
+import { booksApiOpenLibrary } from "./bookApiOpenLibrary";
 
 export const rtkQueryErrorLogger: Middleware = () => (next) => (action) => {
   if (isRejectedWithValue(action) && !action.type.includes("Internal")) {
@@ -27,6 +29,8 @@ export const store = configureStore({
   reducer: {
     // Add the generated reducer as a specific top-level slice
     [authApi.reducerPath]: authApi.reducer,
+    [booksApi.reducerPath]: booksApi.reducer,
+    [booksApiOpenLibrary.reducerPath]: booksApiOpenLibrary.reducer,
     auth: authSlice.reducer,
   },
   // Adding the api middleware enables caching, invalidation, polling,
@@ -34,6 +38,8 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware): any => [
     ...getDefaultMiddleware(),
     authApi.middleware,
+    booksApi.middleware,
+    booksApiOpenLibrary.middleware,
     rtkQueryErrorLogger,
   ],
 });

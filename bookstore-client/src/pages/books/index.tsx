@@ -1,4 +1,7 @@
+import BookCard from "@/components/BookCard";
 import Container from "@/components/Container";
+import DonationBookCard from "@/components/DonationBookCard";
+import { booksApi } from "@/store/booksApi";
 import {
   faBook,
   faDollar,
@@ -7,11 +10,19 @@ import {
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
 import React, { useEffect } from "react";
 
 type Props = {};
 
 const Books = (props: Props) => {
+  const {
+    data: booksData,
+    isLoading: booksLoading,
+    isError: isBooksError,
+    error: booksError,
+  } = booksApi.useGetBooksQuery();
+
   const [selection, setSelection] = React.useState(1);
 
   useEffect(() => {
@@ -121,7 +132,7 @@ const Books = (props: Props) => {
           </button>
         </div>
 
-        {selection === 1 && (
+        {(selection === 1 || selection === 4) && (
           <div className="flex flex-col gap-1 max-w-[700px] mx-auto pt-10">
             <h4 className="text-[23px]">Submit book for review</h4>
             <p className="text-gray-500">
@@ -129,9 +140,30 @@ const Books = (props: Props) => {
               If you want to sell your book, you can submit it for review. We
               will check the condition of the book and give you a quote.
             </p>
-            <button className="bg-[#F05726] text-white px-8 py-1 mt-2 w-max text-[20px] ">
+            <Link
+              href="books/submit"
+              className="bg-[#F05726] text-white px-8 py-3 w-max "
+            >
               Submit
-            </button>
+            </Link>
+          </div>
+        )}
+
+        {selection === 3 && (
+          <div className="flex flex-col gap-1 max-w-[700px] mx-auto pt-10">
+            <h4 className="text-[33px] text-center text-gray-400">Coming Soon</h4>
+          </div>
+        )}
+
+        {selection === 2 && (
+          <div className="mx-auto flex flex-wrap gap-5 max-w-[1140px] mt-5 justify-center">
+            {booksData.map((book: any) =>
+              book.isDonation ? (
+                <DonationBookCard book={book} key={book.id} />
+              ) : (
+                <BookCard book={book} key={book.id} />
+              )
+            )}
           </div>
         )}
 
