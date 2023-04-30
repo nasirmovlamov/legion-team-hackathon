@@ -29,6 +29,7 @@ import { CategoryBook } from './book-categories/entities/category.entity';
 import { CategoriesBookModule } from './book-categories/categories.module';
 import { CategoriesUserModule } from './user-categories/categories.module';
 import { MediaModule } from './media/media.module';
+import { Books } from './books/entities/book.entity';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { MediaModule } from './media/media.module';
         Permission,
         Role,
         User,
+        Books,
         CategoryUser,
         CategoryBook,
       ],

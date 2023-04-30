@@ -54,6 +54,13 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get(':id/books')
+  async findBooks(@Req() request) {
+    const id = request.params.id;
+    return this.usersService.findUserBooks(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @UseGuards(PermissionGuard([PermissionsDefaultData.deleteUser]))
   @Delete(':id')
   async remove(@Req() request) {

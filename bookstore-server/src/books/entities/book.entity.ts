@@ -1,12 +1,10 @@
-import { Permission } from 'src/permissions/entities/permission.entity';
-import { Role } from 'src/roles/entities/role.entity';
-import { CategoryUser } from 'src/user-categories/entities/user-category.entity';
+import { User } from 'src/users/entities/user.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  ManyToMany,
-  JoinTable,
+  ManyToOne,
+  IsNull,
 } from 'typeorm';
 
 @Entity('books')
@@ -30,18 +28,20 @@ export class Books {
   isbn: string;
 
   @Column()
-  price: number;
+  isDonation: boolean;
+
+  @Column({
+    default: false,
+    nullable: true,
+  })
+  isConfirmed: boolean;
+
+  @Column()
+  price: string;
 
   @Column()
   condition: string;
 
-  @ManyToMany(() => Role)
-  @JoinTable()
-  roles: Role[];
-
-  @ManyToMany(() => CategoryUser)
-  @JoinTable()
-  userCategories: CategoryUser[];
-
-  permissions: Permission[];
+  @ManyToOne(() => User, (user) => user.books)
+  users: User;
 }

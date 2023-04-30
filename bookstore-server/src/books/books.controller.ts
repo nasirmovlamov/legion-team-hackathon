@@ -6,23 +6,54 @@ import {
   Patch,
   Param,
   Delete,
+  HttpException,
+  UseGuards,
+  Put,
 } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('books')
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
-  @Post()
-  create(@Body() createBookDto: CreateBookDto) {
-    return this.booksService.create(createBookDto);
+  @UseGuards(JwtAuthGuard)
+  @Post('users/:id')
+  async create(@Body() createBookDto: CreateBookDto, @Param('id') id: string) {
+    try {
+      const newBook = this.booksService.create(+id, createBookDto);
+      return newBook;
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
+  }
+
+  @Get('users/:id')
+  async findAllByUser(@Param('id') id: string) {
+    try {
+      const allBooks = await this.booksService.findAllByUser(+id);
+      return allBooks;
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Get()
   findAll() {
     return this.booksService.findAll();
+  }
+
+  @Put(':bookId/users/:id/confirm')
+  async confirmBook(@Param('id') id: string, @Param('bookId') bookId: string) {
+    try {
+      console.log(id, bookId);
+      const confirmBook = await this.booksService.confirmBook(+id, +bookId);
+      return confirmBook;
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Get(':id')

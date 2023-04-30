@@ -21,6 +21,29 @@ export class UsersService {
     });
   }
 
+  async addBookToUser(id: number, book: any): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: ['books'],
+    });
+    user.books.push(book);
+    return await this.usersRepository.save(user);
+  }
+
+  async updateBookToUser(id: number, book: any): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: ['books'],
+    });
+    user.books = user.books.map((item) => {
+      if (item.id === book.id) {
+        return book;
+      }
+      return item;
+    });
+    return await this.usersRepository.save(user);
+  }
+
   async findByEmailAndGetPassword(email: string): Promise<User | undefined> {
     const user = await this.usersRepository.findOne({
       where: { email },
@@ -59,6 +82,15 @@ export class UsersService {
     });
   }
 
+  async findUserBooks(id: number): Promise<User> {
+    console.log(id);
+    return await this.usersRepository.findOne({
+      where: { id },
+      select: ['id', 'name', 'email'],
+      relations: ['books'],
+    });
+  }
+
   async remove(id: string): Promise<boolean> {
     const deletedUser = await this.usersRepository.delete(id);
     if (deletedUser.affected === 0) {
@@ -81,6 +113,10 @@ export class UsersService {
       where: { id: newUser.id },
       relations: ['roles', 'roles.permissions'],
     });
+    const userWithBooks = await this.usersRepository.findOne({
+      where: { id: newUser.id },
+      relations: ['books'],
+    });
 
     return {
       id: userWithRoles.id,
@@ -88,6 +124,7 @@ export class UsersService {
       email: userWithRoles.email,
       roles: userWithRoles.roles,
       permissions: userWithRoles.roles.map((item) => item.permissions).flat(),
+      books: userWithBooks?.books,
     };
   }
 
